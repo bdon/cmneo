@@ -19,11 +19,9 @@ export interface MessageResponse {
 
 export class ApiClient {
   private baseUrl: string;
-  private token: string | null = null;
 
   constructor(baseUrl: string = API_URL) {
     this.baseUrl = baseUrl;
-    this.token = this.getStoredToken();
   }
 
   private getStoredToken(): string | null {
@@ -37,14 +35,12 @@ export class ApiClient {
     if (typeof window !== 'undefined') {
       localStorage.setItem('access_token', token);
     }
-    this.token = token;
   }
 
   private clearToken() {
     if (typeof window !== 'undefined') {
       localStorage.removeItem('access_token');
     }
-    this.token = null;
   }
 
   private async request<T>(
