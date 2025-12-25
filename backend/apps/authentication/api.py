@@ -11,6 +11,9 @@ from .schemas import (
     UserSchema,
     TokenSchema,
     MessageSchema,
+    PasswordResetRequestSchema,
+    PasswordResetConfirmSchema,
+    AccountDeleteSchema,
 )
 from .utils import (
     create_access_token,
@@ -18,6 +21,9 @@ from .utils import (
     create_magic_link,
     send_magic_link_email,
     verify_magic_link,
+    create_password_reset_token,
+    send_password_reset_email,
+    verify_password_reset_token,
 )
 
 router = Router()
@@ -134,3 +140,44 @@ def get_current_user(request):
         "is_active": request.auth.is_active,
         "date_joined": request.auth.date_joined,
     }
+
+
+@router.post("/password-reset/request", response={200: MessageSchema, 404: MessageSchema})
+def request_password_reset(request, payload: PasswordResetRequestSchema):
+    """Request a password reset email."""
+    try:
+        user = User.objects.get(email=payload.email.lower(), is_active=True)
+    except User.DoesNotExist:
+        # Don't reveal if email exists or not for security
+        return 200, {"message": "If an account exists with this email, a password reset link has been sent"}
+
+    reset_token = create_password_reset_token(user)
+    frontend_url = request.headers.get('Origin', 'http://localhost:4321')
+    send_password_reset_email(user, reset_token, frontend_url)
+
+    return 200, {"message": "If an account exists with this email, a password reset link has been sent"}
+
+
+@router.post("/password-reset/confirm", response={200: MessageSchema, 400: MessageSchema})
+def confirm_password_reset(request, payload: PasswordResetConfirmSchema):
+    """Confirm password reset and set new password."""
+    try:
+        user = verify_password_reset_token(payload.token, payload.new_password)
+        return 200, {"message": "Password has been reset successfully"}
+    except ValueError as e:
+        return 400, {"message": str(e)}
+
+
+@router.post("/account/delete", response={200: MessageSchema, 400: MessageSchema, 401: MessageSchema}, auth=AuthBearer())
+def delete_account(request, payload: AccountDeleteSchema):
+    """Soft delete the current user's account (requires password confirmation)."""
+    user = request.auth
+
+    # Verify password
+    if not user.check_password(payload.password):
+        return 401, {"message": "Invalid password"}
+
+    # Soft delete the account
+    user.soft_delete()
+
+    return 200, {"message": "Account has been deleted successfully"}

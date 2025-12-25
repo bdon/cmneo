@@ -36,3 +36,16 @@ class TokenSchema(Schema):
 
 class MessageSchema(Schema):
     message: str
+
+
+class PasswordResetRequestSchema(Schema):
+    email: str
+
+
+class PasswordResetConfirmSchema(Schema):
+    token: str
+    new_password: str
+
+
+class AccountDeleteSchema(Schema):
+    password: str  # Require password confirmation for account deletion

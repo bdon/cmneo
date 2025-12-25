@@ -4,7 +4,7 @@ from datetime import datetime, timedelta
 from django.conf import settings
 from django.core.mail import send_mail
 from django.utils import timezone
-from .models import User, MagicLink
+from .models import User, MagicLink, PasswordResetToken
 
 
 def create_access_token(user: User) -> str:
@@ -99,3 +99,67 @@ def verify_magic_link(token: str) -> User:
     magic_link.save()
 
     return magic_link.user
+
+
+def create_password_reset_token(user: User) -> PasswordResetToken:
+    """Create a password reset token for the user."""
+    token = secrets.token_urlsafe(32)
+    expires_at = timezone.now() + timedelta(hours=1)  # 1 hour expiry
+
+    reset_token = PasswordResetToken.objects.create(
+        user=user,
+        token=token,
+        expires_at=expires_at
+    )
+
+    return reset_token
+
+
+def send_password_reset_email(user: User, reset_token: PasswordResetToken, frontend_url: str):
+    """Send password reset email to user."""
+    reset_url = f"{frontend_url}/auth/reset-password?token={reset_token.token}"
+
+    subject = "Password Reset Request"
+    message = f"""
+    Hello {user.email},
+
+    You requested to reset your password. Click the link below to set a new password:
+
+    {reset_url}
+
+    This link will expire in 1 hour.
+
+    If you didn't request this password reset, please ignore this email or contact support if you're concerned about your account security.
+    """
+
+    send_mail(
+        subject,
+        message,
+        settings.DEFAULT_FROM_EMAIL,
+        [user.email],
+        fail_silently=False,
+    )
+
+
+def verify_password_reset_token(token: str, new_password: str) -> User:
+    """Verify a password reset token and update the user's password."""
+    try:
+        reset_token = PasswordResetToken.objects.get(token=token)
+    except PasswordResetToken.DoesNotExist:
+        raise ValueError("Invalid password reset token")
+
+    if not reset_token.is_valid():
+        raise ValueError("Password reset token has expired or already been used")
+
+    # Update the user's password
+    user = reset_token.user
+    user.set_password(new_password)
+    user.save()
+
+    # Mark token as used
+    reset_token.used_at = timezone.now()
+    reset_token.save()
+
+    return user
+
+

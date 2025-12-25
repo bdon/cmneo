@@ -134,6 +134,27 @@ export class ApiClient {
   isAuthenticated(): boolean {
     return this.getStoredToken() !== null;
   }
+
+  async requestPasswordReset(email: string): Promise<MessageResponse> {
+    return this.request<MessageResponse>('/auth/password-reset/request', {
+      method: 'POST',
+      body: JSON.stringify({ email }),
+    });
+  }
+
+  async confirmPasswordReset(token: string, newPassword: string): Promise<MessageResponse> {
+    return this.request<MessageResponse>('/auth/password-reset/confirm', {
+      method: 'POST',
+      body: JSON.stringify({ token, new_password: newPassword }),
+    });
+  }
+
+  async deleteAccount(password: string): Promise<MessageResponse> {
+    return this.request<MessageResponse>('/auth/account/delete', {
+      method: 'POST',
+      body: JSON.stringify({ password }),
+    });
+  }
 }
 
 export const apiClient = new ApiClient();

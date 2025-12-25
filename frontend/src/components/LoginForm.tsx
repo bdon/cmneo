@@ -86,6 +86,12 @@ export default function LoginForm() {
           >
             Or login with magic link
           </button>
+
+          <p style="margin-top: 1rem; text-align: center;">
+            <a href="/auth/forgot-password" style="color: #007bff; text-decoration: underline;">
+              Forgot password?
+            </a>
+          </p>
         </form>
       }>
         <form onSubmit={handleMagicLink}>

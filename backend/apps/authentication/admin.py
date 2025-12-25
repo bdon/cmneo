@@ -1,20 +1,27 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
-from .models import User, MagicLink
+from .models import User, MagicLink, PasswordResetToken
 
 
 @admin.register(User)
 class UserAdmin(BaseUserAdmin):
-    list_display = ('email', 'is_active', 'is_staff', 'date_joined')
-    list_filter = ('is_active', 'is_staff', 'is_superuser')
+    list_display = ('email', 'is_active', 'is_staff', 'is_deleted', 'date_joined')
+    list_filter = ('is_active', 'is_staff', 'is_superuser', 'deleted_at')
     search_fields = ('email',)
     ordering = ('-date_joined',)
 
     fieldsets = (
         (None, {'fields': ('email', 'password')}),
         ('Permissions', {'fields': ('is_active', 'is_staff', 'is_superuser', 'groups', 'user_permissions')}),
-        ('Important dates', {'fields': ('last_login', 'date_joined')}),
+        ('Important dates', {'fields': ('last_login', 'date_joined', 'deleted_at')}),
     )
+
+    readonly_fields = ('date_joined', 'last_login', 'deleted_at')
+
+    def is_deleted(self, obj):
+        return obj.is_deleted
+    is_deleted.boolean = True
+    is_deleted.short_description = 'Deleted'
 
     add_fieldsets = (
         (None, {
@@ -26,6 +33,19 @@ class UserAdmin(BaseUserAdmin):
 
 @admin.register(MagicLink)
 class MagicLinkAdmin(admin.ModelAdmin):
+    list_display = ('user', 'created_at', 'expires_at', 'used_at', 'is_valid')
+    list_filter = ('created_at', 'expires_at', 'used_at')
+    search_fields = ('user__email', 'token')
+    readonly_fields = ('token', 'created_at')
+    ordering = ('-created_at',)
+
+    def is_valid(self, obj):
+        return obj.is_valid()
+    is_valid.boolean = True
+
+
+@admin.register(PasswordResetToken)
+class PasswordResetTokenAdmin(admin.ModelAdmin):
     list_display = ('user', 'created_at', 'expires_at', 'used_at', 'is_valid')
     list_filter = ('created_at', 'expires_at', 'used_at')
     search_fields = ('user__email', 'token')
