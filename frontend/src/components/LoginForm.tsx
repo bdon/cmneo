@@ -1,15 +1,15 @@
-import { createSignal } from 'solid-js';
+import { createSignal, Show } from 'solid-js';
 import { apiClient } from '../lib/api';
 
 export default function LoginForm() {
-  const [email, setEmail] = createSignal('');
-  const [password, setPassword] = createSignal('');
-  const [error, setError] = createSignal('');
-  const [loading, setLoading] = createSignal(false);
-  const [showMagicLink, setShowMagicLink] = createSignal(false);
-  const [magicLinkSent, setMagicLinkSent] = createSignal(false);
+  const [email, setEmail] = createSignal<string>('');
+  const [password, setPassword] = createSignal<string>('');
+  const [error, setError] = createSignal<string>('');
+  const [loading, setLoading] = createSignal<boolean>(false);
+  const [showMagicLink, setShowMagicLink] = createSignal<boolean>(false);
+  const [magicLinkSent, setMagicLinkSent] = createSignal<boolean>(false);
 
-  const handleLogin = async (e: Event) => {
+  const handleLogin = async (e: SubmitEvent): Promise<void> => {
     e.preventDefault();
     setError('');
     setLoading(true);
@@ -24,7 +24,7 @@ export default function LoginForm() {
     }
   };
 
-  const handleMagicLink = async (e: Event) => {
+  const handleMagicLink = async (e: SubmitEvent): Promise<void> => {
     e.preventDefault();
     setError('');
     setLoading(true);
@@ -43,10 +43,15 @@ export default function LoginForm() {
     <div class="login-container">
       <h2>Login</h2>
 
-      {error() && <div class="error">{error()}</div>}
-      {magicLinkSent() && <div class="success">Magic link sent! Check your email.</div>}
+      <Show when={error()}>
+        <div class="error">{error()}</div>
+      </Show>
 
-      {!showMagicLink() ? (
+      <Show when={magicLinkSent()}>
+        <div class="success">Magic link sent! Check your email.</div>
+      </Show>
+
+      <Show when={!showMagicLink()} fallback={
         <form onSubmit={handleLogin}>
           <div class="form-group">
             <label for="email">Email</label>
@@ -82,7 +87,7 @@ export default function LoginForm() {
             Or login with magic link
           </button>
         </form>
-      ) : (
+      }>
         <form onSubmit={handleMagicLink}>
           <div class="form-group">
             <label for="email">Email</label>
@@ -107,7 +112,7 @@ export default function LoginForm() {
             Back to password login
           </button>
         </form>
-      )}
+      </Show>
     </div>
   );
 }

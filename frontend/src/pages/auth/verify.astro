@@ -1,44 +1,8 @@
 ---
 import Layout from '../../layouts/Layout.astro';
+import MagicLinkVerify from '../../components/MagicLinkVerify';
 ---
 
 <Layout title="Verifying Magic Link">
-  <div class="card">
-    <div id="verify-status">
-      <p>Verifying your magic link...</p>
-    </div>
-  </div>
+  <MagicLinkVerify client:load />
 </Layout>
-
-<script>
-  import { apiClient } from '../../lib/api';
-
-  async function verifyToken() {
-    const params = new URLSearchParams(window.location.search);
-    const token = params.get('token');
-    const statusDiv = document.getElementById('verify-status');
-
-    if (!token) {
-      if (statusDiv) {
-        statusDiv.innerHTML = '<div class="error">Invalid magic link</div>';
-      }
-      return;
-    }
-
-    try {
-      await apiClient.verifyMagicLink(token);
-      if (statusDiv) {
-        statusDiv.innerHTML = '<div class="success">Login successful! Redirecting...</div>';
-      }
-      setTimeout(() => {
-        window.location.href = '/dashboard';
-      }, 1000);
-    } catch (err) {
-      if (statusDiv) {
-        statusDiv.innerHTML = `<div class="error">${err instanceof Error ? err.message : 'Verification failed'}</div>`;
-      }
-    }
-  }
-
-  verifyToken();
-</script>

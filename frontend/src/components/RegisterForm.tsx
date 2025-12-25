@@ -1,15 +1,15 @@
-import { createSignal } from 'solid-js';
+import { createSignal, Show } from 'solid-js';
 import { apiClient } from '../lib/api';
 
 export default function RegisterForm() {
-  const [email, setEmail] = createSignal('');
-  const [password, setPassword] = createSignal('');
-  const [firstName, setFirstName] = createSignal('');
-  const [lastName, setLastName] = createSignal('');
-  const [error, setError] = createSignal('');
-  const [loading, setLoading] = createSignal(false);
+  const [email, setEmail] = createSignal<string>('');
+  const [password, setPassword] = createSignal<string>('');
+  const [firstName, setFirstName] = createSignal<string>('');
+  const [lastName, setLastName] = createSignal<string>('');
+  const [error, setError] = createSignal<string>('');
+  const [loading, setLoading] = createSignal<boolean>(false);
 
-  const handleRegister = async (e: Event) => {
+  const handleRegister = async (e: SubmitEvent): Promise<void> => {
     e.preventDefault();
     setError('');
     setLoading(true);
@@ -28,7 +28,9 @@ export default function RegisterForm() {
     <div class="register-container">
       <h2>Register</h2>
 
-      {error() && <div class="error">{error()}</div>}
+      <Show when={error()}>
+        <div class="error">{error()}</div>
+      </Show>
 
       <form onSubmit={handleRegister}>
         <div class="form-group">

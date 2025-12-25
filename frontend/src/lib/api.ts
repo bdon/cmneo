@@ -36,12 +36,8 @@ export class ApiClient {
   }
 
   private storeToken(token: string) {
-    console.log('storeToken called with:', token);
-    console.log('window exists:', typeof window !== 'undefined');
     if (typeof window !== 'undefined') {
       localStorage.setItem('access_token', token);
-      console.log('localStorage.setItem completed');
-      console.log('Verify localStorage:', localStorage.getItem('access_token'));
     }
     this.token = token;
   }
@@ -64,7 +60,12 @@ export class ApiClient {
 
     // Always check localStorage for the latest token
     const currentToken = this.getStoredToken();
-    if (currentToken && !endpoint.includes('/auth/')) {
+
+    // Skip auth header only for login/register/magic-link endpoints
+    const skipAuthEndpoints = ['/auth/login', '/auth/register', '/auth/magic-link'];
+    const shouldSkipAuth = skipAuthEndpoints.some(path => endpoint.includes(path));
+
+    if (currentToken && !shouldSkipAuth) {
       headers['Authorization'] = `Bearer ${currentToken}`;
     }
 
@@ -87,7 +88,6 @@ export class ApiClient {
     firstName?: string,
     lastName?: string
   ): Promise<AuthResponse> {
-    console.log('Registration request starting...');
     const response = await this.request<AuthResponse>('/auth/register', {
       method: 'POST',
       body: JSON.stringify({
@@ -98,10 +98,7 @@ export class ApiClient {
       }),
     });
 
-    console.log('Registration response:', response);
-    console.log('Access token:', response.access_token);
     this.storeToken(response.access_token);
-    console.log('Token stored in localStorage');
     return response;
   }
 
