@@ -1,0 +1,55 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="Dashboard">
+  <div class="card">
+    <h1>Dashboard</h1>
+    <div id="user-info">
+      <p>Loading...</p>
+    </div>
+    <button id="logout-btn" style="margin-top: 2rem;">Logout</button>
+  </div>
+</Layout>
+
+<script>
+  import { apiClient } from '../lib/api';
+
+  async function loadUser() {
+    const userInfoDiv = document.getElementById('user-info');
+
+    if (!apiClient.isAuthenticated()) {
+      window.location.href = '/auth/login';
+      return;
+    }
+
+    try {
+      const user = await apiClient.getCurrentUser();
+      if (userInfoDiv) {
+        userInfoDiv.innerHTML = `
+          <p><strong>Email:</strong> ${user.email}</p>
+          <p><strong>Name:</strong> ${user.first_name} ${user.last_name}</p>
+          <p><strong>Member since:</strong> ${new Date(user.date_joined).toLocaleDateString()}</p>
+        `;
+      }
+    } catch (err) {
+      if (userInfoDiv) {
+        userInfoDiv.innerHTML = '<div class="error">Failed to load user data</div>';
+      }
+      apiClient.logout();
+      setTimeout(() => {
+        window.location.href = '/auth/login';
+      }, 2000);
+    }
+  }
+
+  const logoutBtn = document.getElementById('logout-btn');
+  if (logoutBtn) {
+    logoutBtn.addEventListener('click', () => {
+      apiClient.logout();
+      window.location.href = '/auth/login';
+    });
+  }
+
+  loadUser();
+</script>

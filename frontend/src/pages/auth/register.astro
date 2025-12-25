@@ -1,0 +1,13 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import RegisterForm from '../../components/RegisterForm';
+---
+
+<Layout title="Register">
+  <div class="card">
+    <RegisterForm client:load />
+    <p style="margin-top: 1rem; text-align: center;">
+      Already have an account? <a href="/auth/login" style="color: #007bff;">Login</a>
+    </p>
+  </div>
+</Layout>

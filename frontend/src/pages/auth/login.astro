@@ -1,0 +1,13 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import LoginForm from '../../components/LoginForm';
+---
+
+<Layout title="Login">
+  <div class="card">
+    <LoginForm client:load />
+    <p style="margin-top: 1rem; text-align: center;">
+      Don't have an account? <a href="/auth/register" style="color: #007bff;">Register</a>
+    </p>
+  </div>
+</Layout>
