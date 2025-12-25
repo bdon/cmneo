@@ -35,7 +35,7 @@ services:
         sync: false
       - key: AWS_SES_REGION
         value: us-east-1
-    healthCheckPath: /api/docs
+    healthCheckPath: /health/
 
   # Astro Frontend (Static Site)
   - type: web
