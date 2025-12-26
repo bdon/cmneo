@@ -1,0 +1,54 @@
+{% extends "common.html" %}
+{% load staticfiles %}
+{% block common %}
+<div class="flex flex-column min-vh-100">
+  {% include 'frontend/_nav.html' %}
+  <main class="flex-grow-1 w-100">
+    {% if messages %}
+      <div class="bg-washed-green pv3 ph3 green fw5" role="alert">
+        {% for message in messages %}
+          <div>
+            {% if 'safe' in message.tags %}{{ message|safe }}{% else %}{{ message }}{% endif %}
+          </div>
+        {% endfor %}
+      </div>
+    {% endif %}
+    <div id="{{ react_id }}">
+    {% block fixedwidth %}
+    {% endblock %}
+    </div>
+  </main>
+  <footer class="pa3 pa0-ns" style="background: #000333; line-height: 24px">
+    <div class="ml-auto mr-auto mb6" style="max-width: 1152px">
+      <img class="w-100" src="{% static 'frontend/images/newlayout/logo.svg' %}" alt="CADMAPPER logo" style="margin-top: 44px"/>
+      <div class="flex flex-row mt4 justify-between">
+        <div class="flex flex-wrap">
+          <div class="mr5 mb4">
+            <div class="fw6 white">Get started</div>
+            <a class="db f5 link white" href="/pro/login">Login</a>
+            <a class="db f5 link white" href="/pro/signup">Sign Up</a>
+          </div>
+          <div class="mr5 mb4">
+            <div class="fw6 white">Tools & Resources</div>
+            <a class="db f5 link white" href="/#metro">Free City Files</a>
+            <a class="db f5 link white" href="/pro/home">Create a Map</a>
+          </div>
+          <div class="mr5 mb4">
+            <div class="fw6 white">Help & Support</div>
+            <a class="db f5 link white" href="/help">FAQ</a>
+            <a class="db f5 link white" href="/help">Contact</a>
+            <a class="db f5 link white" href="/terms">License and Terms of Use</a>
+          </div>
+          <div class="mr5 mb4">
+            <div class="fw6 white">Follow us</div>
+            <a class="db f5 link white" href="https://twitter.com/cad_mapper">Twitter / X</a>
+          </div>
+        </div>
+        <div class="flex white">
+          Cadmapper © 2013-2024
+        </div>
+      </div>
+    </div>
+  </footer>
+</div>
+{% endblock %}
