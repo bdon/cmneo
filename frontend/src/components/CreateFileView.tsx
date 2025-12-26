@@ -16,7 +16,7 @@ export default function CreateFileView() {
 
     new maplibregl.Map({
       container: "map",
-      style: `https://api.protomaps.com/styles/v5/light/en.json?key=5b9c1298c2eef269`
+      style: `https://api.protomaps.com/styles/v5/light/en.json?key=8acefbf935d5ee99`
     });
   });
 
