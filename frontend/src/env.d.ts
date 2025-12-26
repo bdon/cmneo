@@ -3,6 +3,8 @@
 
 interface ImportMetaEnv {
   readonly PUBLIC_API_URL: string;
+  readonly PUBLIC_PROTOMAPS_KEY: string;
+  readonly PUBLIC_GEOCODE_EARTH_KEY: string;
 }
 
 interface ImportMeta {
