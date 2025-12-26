@@ -1,5 +1,31 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import { Image } from 'astro:assets';
+
+// Import header carousel images
+import headerStep1 from '../assets/newlayout/cadmapper-header-step1.png';
+import headerStep2 from '../assets/newlayout/cadmapper-header-step2.png';
+import headerStep3 from '../assets/newlayout/cadmapper-header-step3.png';
+
+// Import software icons
+import autocadSvg from '../assets/newlayout/cadmapper-autocad.svg';
+import sketchupSvg from '../assets/newlayout/cadmapper-sketchup.svg';
+import rhinoSvg from '../assets/newlayout/cadmapper-rhino.svg';
+import illustratorSvg from '../assets/newlayout/cadmapper-adobeillustrator.svg';
+
+// Import background and product kind images
+import pinkBackground from '../assets/newlayout/pink-background.png';
+import productKind1 from '../assets/newlayout/productkind-1.svg';
+import productKind2 from '../assets/newlayout/productkind-2.svg';
+import productKind3 from '../assets/newlayout/productkind-3.svg';
+
+// Import world carousel images
+import worldHongKong from '../assets/newlayout/cadmapper-world-hongkong-2x.png';
+import worldCopenhagen from '../assets/newlayout/cadmapper-world-copenhagen-2x.png';
+import worldLima from '../assets/newlayout/cadmapper-world-lima-2x.png';
+import worldLondon from '../assets/newlayout/cadmapper-world-london-2x.png';
+import worldNewDelhi from '../assets/newlayout/cadmapper-world-newdelhi-2x.png';
+import worldInterlaken from '../assets/newlayout/cadmapper-world-interlaken-2x.png';
 ---
 
 <Layout title="Worldwide map files for any design program | CADMAPPER">
@@ -42,14 +68,6 @@ import Layout from '../layouts/Layout.astro';
       letter-spacing: 2px;
       font-weight: 300;
       font-family: Quicksand;
-    }
-
-    .productKind img {
-      margin-top: 2rem;
-      margin-bottom: 2rem;
-      margin-left: auto;
-      margin-right: auto;
-      width: 50%;
     }
 
     .pillContainer {
@@ -129,8 +147,24 @@ import Layout from '../layouts/Layout.astro';
       min-width: 0;
     }
 
-    .embla__slide img {
+    .embla__slide img,
+    .embla__slide :global(img) {
       max-height: 800px;
+      width: 100%;
+      height: auto;
+    }
+
+    .productKind :global(img) {
+      margin-top: 2rem;
+      margin-bottom: 2rem;
+      margin-left: auto;
+      margin-right: auto;
+      width: 50%;
+    }
+
+    .softwareIcon :global(img) {
+      height: 90px;
+      width: auto;
     }
 
     .mobileLabel {
@@ -186,15 +220,15 @@ import Layout from '../layouts/Layout.astro';
       <div class="embla" id="intro_carousel">
         <div class="embla__container">
           <div class="embla__slide">
-            <img src="/images/newlayout/cadmapper-header-step1.png" alt="Select an area"/>
+            <Image src={headerStep1} alt="Select an area" />
             <div class="inline-flex items-center dn-ns mobileLabel"><span class="bignum">1</span>Define any area</div>
           </div>
           <div class="embla__slide">
-            <img src="/images/newlayout/cadmapper-header-step2.png" alt="Edit in CAD"/>
+            <Image src={headerStep2} alt="Edit in CAD" />
             <div class="inline-flex items-center dn-ns mobileLabel"><span class="bignum">2</span>Edit layers in CAD</div>
           </div>
           <div class="embla__slide">
-            <img src="/images/newlayout/cadmapper-header-step3.png" alt="Render in CAD"/>
+            <Image src={headerStep3} alt="Render in CAD" />
             <div class="inline-flex items-center dn-ns mobileLabel"><span class="bignum">3</span>Render your design</div>
           </div>
         </div>
@@ -213,23 +247,23 @@ import Layout from '../layouts/Layout.astro';
   </div>
   <div class="flex flex-wrap flex-nowrap-ns justify-around ml-auto mr-auto mt5 mw1152">
     <div class="softwareIcon w-50 w-auto-ns tc">
-      <img src="/images/newlayout/cadmapper-autocad.svg" alt="AutoCAD Logo" style="height:90px"/>
+      <Image src={autocadSvg} alt="AutoCAD Logo" />
       <span class="black mt35">AutoCAD</span>
     </div>
     <div class="softwareIcon w-50 w-auto-ns tc">
-      <img src="/images/newlayout/cadmapper-sketchup.svg" alt="SketchUp Logo" style="height:90px"/>
+      <Image src={sketchupSvg} alt="SketchUp Logo" />
       <span class="black mt35">SketchUp 8+</span>
     </div>
     <div class="softwareIcon w-50 w-auto-ns tc">
-      <img src="/images/newlayout/cadmapper-rhino.svg" alt="Rhino Logo" style="height:90px"/>
+      <Image src={rhinoSvg} alt="Rhino Logo" />
       <span class="black mt35">Rhinoceros 5+</span>
     </div>
     <div class="softwareIcon w-50 w-auto-ns tc">
-      <img src="/images/newlayout/cadmapper-adobeillustrator.svg" alt="Adobe Illustrator Logo" style="height:90px"/>
+      <Image src={illustratorSvg} alt="Adobe Illustrator Logo" />
       <span class="black mt35">Adobe Illustrator</span>
     </div>
   </div>
-  <div class="ml-auto mr-auto flex flex-column items-center tc" style="margin-top: 40px; padding-top: 35px; padding-bottom: 35px; max-width: 568px; background: #FBEBF3; border-radius: 30px; background-image: url(/images/newlayout/pink-background.png); background-size: 800px;">
+  <div class="ml-auto mr-auto flex flex-column items-center tc" style={`margin-top: 40px; padding-top: 35px; padding-bottom: 35px; max-width: 568px; background: #FBEBF3; border-radius: 30px; background-image: url(${pinkBackground.src}); background-size: 800px;`}>
     <span class="black" style="font-family: 'Quicksand'; font-size: 24px; font-weight: 700">Get started now</span>
     <span class="black mt35">Easily create a file now, without the need for a subscription.</span>
     <a class="white bg-black grow pointer link mt35" href="/pro/" style="border-radius: 52px; padding: 14px 20px 14px 20px;">→ Create File</a>
@@ -240,7 +274,7 @@ import Layout from '../layouts/Layout.astro';
         <span class="topPill">FREE</span>
       </div>
       <span class="smallHeading">Whole Cities</span>
-      <img src="/images/newlayout/productkind-1.svg" alt="Whole City File"/>
+      <Image src={productKind1} alt="Whole City File" />
       <span class="black lh-copy mw5 ml-auto mr-auto">Over 200 metro road networks. Free and no account required - <a class="black link" href="#metro">download them below!</a></span>
     </div>
     <div class="productKind ml4-ns mr4-ns mt4 mb4 mt0-ns mb0-ns" style="background-color: #DCE7FB;">
@@ -248,12 +282,12 @@ import Layout from '../layouts/Layout.astro';
         <span class="topPill">FREE</span>
       </div>
       <span class="smallHeading">Up to 1 km2</span>
-      <img src="/images/newlayout/productkind-2.svg" alt="Free File"/>
+      <Image src={productKind2} alt="Free File" />
       <span class="black lh-copy mw5 ml-auto mr-auto">Free CAD files include all available data in any format. <br/><a class="black link" href="/pro/signup">Sign up to download.</a></span>
     </div>
     <div class="productKind" style="background-color: #DBF5E8;">
       <span class="smallHeading">Up to 100 km2</span>
-      <img src="/images/newlayout/productkind-3.svg" alt="Premium File"/>
+      <Image src={productKind3} alt="Premium File" />
       <span class="black lh-copy mw5 ml-auto mr-auto">Available for a small fee. A discount is applied if you <a class="black link" href="/pro/signup">register with an academic email address.</a></span>
     </div>
   </div>
@@ -264,27 +298,27 @@ import Layout from '../layouts/Layout.astro';
       <div id="atw_carousel" class="embla">
         <div class="embla__container">
           <div class="embla__slide">
-            <img src="/images/newlayout/cadmapper-world-hongkong-2x.png" alt="Hong Kong"/>
+            <Image src={worldHongKong} alt="Hong Kong" />
             <div class="inline-flex items-center dn-ns mobileLabel">Hong Kong</div>
           </div>
           <div class="embla__slide">
-            <img src="/images/newlayout/cadmapper-world-copenhagen-2x.png" alt="Copenhagen"/>
+            <Image src={worldCopenhagen} alt="Copenhagen" />
             <div class="inline-flex items-center dn-ns mobileLabel">Copenhagen</div>
           </div>
           <div class="embla__slide">
-            <img src="/images/newlayout/cadmapper-world-lima-2x.png" alt="Lima"/>
+            <Image src={worldLima} alt="Lima" />
             <div class="inline-flex items-center dn-ns mobileLabel">Lima</div>
           </div>
           <div class="embla__slide">
-            <img src="/images/newlayout/cadmapper-world-london-2x.png" alt="London"/>
+            <Image src={worldLondon} alt="London" />
             <div class="inline-flex items-center dn-ns mobileLabel">London</div>
           </div>
           <div class="embla__slide">
-            <img src="/images/newlayout/cadmapper-world-newdelhi-2x.png" alt="New Delhi"/>
+            <Image src={worldNewDelhi} alt="New Delhi" />
             <div class="inline-flex items-center dn-ns mobileLabel">New Delhi</div>
           </div>
           <div class="embla__slide">
-            <img src="/images/newlayout/cadmapper-world-interlaken-2x.png" alt="Interlaken"/>
+            <Image src={worldInterlaken} alt="Interlaken" />
             <div class="inline-flex items-center dn-ns mobileLabel">Interlaken</div>
           </div>
         </div>
